@@ -1,0 +1,14 @@
+<h1>Employees in division: <%= @division.name %> </h1>
+
+<% if @employees.any? %>
+  <ul>
+    <% @employees.each do |employee| %>
+      <li><%= link_to employee.name, division_employee_path(@division, employee) %></li>
+    <% end %>
+  </ul>
+<% else %>
+  <p>There are no employees in this division yet.</p>
+<% end %>
+
+
+<p><%= link_to "Add new employee", new_division_employee_path %></p>
