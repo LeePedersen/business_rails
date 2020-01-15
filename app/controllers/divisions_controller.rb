@@ -41,6 +41,9 @@ class DivisionsController < ApplicationController
 
   def destroy
     @division = Division.find(params[:id])
+    @division.employees.each do |employee|
+      employee.destroy
+    end
     @division.destroy
     redirect_to divisions_path
   end
