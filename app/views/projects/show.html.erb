@@ -2,11 +2,10 @@
 
 <ul>
   <% @project.employees.each do |employee| %>
-  <li><%= employee.name %></li>
+  <li><%= link_to employee.name, division_employee_path(employee.division, employee) %></li>
   <% end %>
 </ul>
 
-<%# <!-- <p><%= link_to "Add employee to project", new_employees_project_path(@project) %></p> --> %>
 <p><%= link_to "Edit", edit_project_path(@project) %></p>
 <p><%= link_to "Delete", project_path(@project),
                          :data => {:confirm => "You sure?",
