@@ -4,4 +4,8 @@ Rails.application.routes.draw do
   end
   resources :projects
   root to: 'divisions#index'
+
+  # resources :project_name do
+  #   post
+  # end
 end
