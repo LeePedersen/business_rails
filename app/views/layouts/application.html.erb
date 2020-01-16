@@ -11,6 +11,12 @@
 
   <body>
     <p><a href="/">Home</a></p>
+
+    <%= flash[:alert] %>
+    <%= flash[:notice] %>
+
     <%= yield %>
+
+
   </body>
 </html>

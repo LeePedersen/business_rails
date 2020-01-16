@@ -1,4 +1,5 @@
 class EmployeesController < ApplicationController
+  DB = PG.connect({:dbname => "rails_business_development"})
 
   def index
     @division = Division.find(params[:division_id])
@@ -23,7 +24,6 @@ class EmployeesController < ApplicationController
   end
 
   def edit
-    # binding.pry
     @division = Division.find(params[:division_id])
     @employee = Employee.find(params[:id])
     @projects = Project.all
@@ -41,7 +41,17 @@ class EmployeesController < ApplicationController
     @employee = Employee.find(params[:id])
     @project = Project.find(params[:project_id])
     if @project
-      @employee.projects << @project
+      distinct_projects = DB.exec("SELECT DISTINCT project_id FROM employees_projects WHERE employee_id = #{@employee.id};")
+      distinct = true
+      distinct_projects.each do |distinct_project|
+        if distinct_project.first[1].to_i == @project.id.to_i
+          flash[:notice] = "This employee is already on this project"
+          distinct = false
+        end
+      end
+      if distinct == true
+        @employee.projects << @project
+      end
       redirect_to division_employee_path(@division, @employee)
     elsif @employee.update(employee_params)
       redirect_to division_path(@division)

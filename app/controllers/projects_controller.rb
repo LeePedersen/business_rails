@@ -1,5 +1,5 @@
 class ProjectsController < ApplicationController
-DB = PG.connect({:dbname => "rails_business_development"})
+  DB = PG.connect({:dbname => "rails_business_development"})
 
   def index
     @projects = Project.all
@@ -34,22 +34,26 @@ DB = PG.connect({:dbname => "rails_business_development"})
 
   def update
     @project= Project.find(params[:id])
-    @employee = Employee.find(params[:employee_id])
-    if @employee
+    @employee_add = Employee.find(params[:employee_add])
+    @employee_rem = Employee.find(params[:employee_rem])
+
+    if @employee_add
       distinct_employees = DB.exec("SELECT DISTINCT employee_id FROM employees_projects WHERE project_id = #{@project.id};")
       distinct = true
       distinct_employees.each do |distinct_employee|
-        if distinct_employee.first[1].to_i == @employee.id.to_i
+        if distinct_employee.first[1].to_i == @employee_add.id.to_i
+          flash[:notice] = "This employee is already on this project"
           distinct = false
         end
       end
       if distinct == true
-        @project.employees << @employee
+        @project.employees << @employee_add
       end
       redirect_to project_path(@project)
     elsif @project.update(project_params)
       redirect_to projects_path
-    else
+    elsif @employee_rem
+      
       render :edit
     end
   end
