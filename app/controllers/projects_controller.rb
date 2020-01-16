@@ -34,10 +34,8 @@ class ProjectsController < ApplicationController
 
   def update
     @project= Project.find(params[:id])
-    @employee_add = Employee.find(params[:employee_add])
-    @employee_rem = Employee.find(params[:employee_rem])
-
-    if @employee_add
+    if params[:employee_add] != "nil"
+      @employee_add = Employee.find(params[:employee_add])
       distinct_employees = DB.exec("SELECT DISTINCT employee_id FROM employees_projects WHERE project_id = #{@project.id};")
       distinct = true
       distinct_employees.each do |distinct_employee|
@@ -50,10 +48,14 @@ class ProjectsController < ApplicationController
         @project.employees << @employee_add
       end
       redirect_to project_path(@project)
+    elsif params[:employee_rem] != "nil"
+      employee_rem = Employee.find(params[:employee_rem])
+      DB.exec("DELETE FROM employees_projects WHERE employee_id = #{employee_rem.id.to_i} AND project_id = #{@project.id};")
+      # @project.employees[params(:employee_rem).to_i].delete!
+      redirect_to project_path(@project)
     elsif @project.update(project_params)
       redirect_to projects_path
-    elsif @employee_rem
-      
+    else
       render :edit
     end
   end
@@ -61,6 +63,7 @@ class ProjectsController < ApplicationController
   def destroy
     @project = Project.find(params[:id])
     @project.destroy
+    DB.exec("DELETE FROM employees_projects WHERE project_id = #{@project.id.to_i};")
     redirect_to projects_path
   end
 

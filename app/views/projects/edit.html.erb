@@ -12,10 +12,11 @@
   <% end %>
 </select>
 <br>
+<p>OR</p>
 <label for="employee_rem">Remove this employee from this project</label>
 <select name="employee_rem">
   <option value="nil">None</option>
-  <% @employees.each do |employee| %>
+  <% @project.employees.each do |employee| %>
   <option value="<%= employee.id %>"><%= employee.name %></option>
   <% end %>
 </select>
