@@ -23,7 +23,7 @@ class EmployeesController < ApplicationController
   end
 
   def edit
-    binding.pry
+    # binding.pry
     @division = Division.find(params[:division_id])
     @employee = Employee.find(params[:id])
     @projects = Project.all
@@ -43,8 +43,7 @@ class EmployeesController < ApplicationController
     if @project
       @employee.projects << @project
       redirect_to division_employee_path(@division, @employee)
-    end
-    if @employee.update(employee_params)
+    elsif @employee.update(employee_params)
       redirect_to division_path(@division)
     else
       render :edit
@@ -59,7 +58,7 @@ class EmployeesController < ApplicationController
   end
 
   private
-    def employee_params
-      params.require(:employee).permit(:name, :project_id)
-    end
+  def employee_params
+    params.require(:employee).permit(:name, :project_id)
+  end
 end
