@@ -1,5 +1,7 @@
 <h1><%= @employee.name %></h1>
 
+<p><%= Employee.old %></p>
+
 <% if @employee.projects.any? %>
 <ul>
   <% @employee.projects.each do |project| %>
